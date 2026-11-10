@@ -1,0 +1,211 @@
+{% extends "quartier/base.html" %}
+{% load static %}
+
+{% block title %}Dieupeul Derklé — Le cœur de Dakar{% endblock %}
+
+{% block content %}
+<section class="hero" id="accueil" aria-labelledby="hero-title">
+    <div class="hero-image" role="img" aria-label="Image d'illustration d'une rue urbaine"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content mx-auto max-w-7xl px-5 lg:px-8">
+        <p class="eyebrow eyebrow-light"><span></span> Dakar · Sénégal</p>
+        <h1 id="hero-title" class="hero-title">Là où Dakar<br>se sent <em>chez soi.</em></h1>
+        <p class="hero-copy">Bienvenue à Dieupeul Derklé, un quartier de rencontres, de partage et de vie.</p>
+        <div class="mt-8 flex flex-wrap items-center gap-4">
+            <a href="#histoire" class="button button-sun">Découvrir le quartier <span aria-hidden="true">↓</span></a>
+            <a href="#galerie" class="hero-text-link">Voir la galerie <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="hero-location"><span aria-hidden="true">⌖</span> Dieupeul Derklé, Dakar</div>
+    </div>
+    <a class="hero-scroll" href="#histoire" aria-label="Défiler vers la suite"><span></span></a>
+</section>
+
+<section class="section-pad story-section" id="histoire" aria-labelledby="story-title">
+    <div class="mx-auto grid max-w-7xl items-center gap-12 px-5 lg:grid-cols-2 lg:gap-20 lg:px-8">
+        <div class="story-visual reveal">
+            <div class="story-image" role="img" aria-label="Image d'illustration d'une scène urbaine"></div>
+            <div class="story-stamp"><span>Notre</span><strong>teranga</strong><span>au quotidien</span></div>
+            <span class="story-caption">Un quartier qui se raconte ensemble</span>
+        </div>
+        <div class="reveal">
+            <p class="eyebrow"><span></span> Nos racines, notre avenir</p>
+            <h2 class="section-title" id="story-title">Une histoire écrite <em>ensemble.</em></h2>
+            <p class="section-copy">À Dieupeul Derklé, l'identité du quartier se tisse dans les gestes du quotidien : les salutations du matin, les commerces de proximité, les fêtes partagées et les souvenirs transmis de génération en génération.</p>
+            <p class="section-copy mt-4">Cette page est la vôtre. Ajoutez vos récits, vos photos et vos repères pour faire vivre la mémoire commune du quartier.</p>
+            <div class="timeline mt-9">
+                {% for etape in etapes_histoire %}
+                <div class="timeline-item">
+                    <span class="timeline-dot"></span>
+                    <div><span class="timeline-period">{{ etape.repere }}</span><h3>{{ etape.titre }}</h3><p>{{ etape.description }}</p></div>
+                </div>
+                {% empty %}
+                <p class="timeline-empty">Ajoutez les grandes étapes de l'histoire du quartier depuis l'administration.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-pad places-section" id="lieux" aria-labelledby="places-title">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="section-heading reveal">
+            <div><p class="eyebrow"><span></span> Les repères du quotidien</p><h2 class="section-title" id="places-title">Des lieux qui nous <em>rassemblent.</em></h2></div>
+            <p class="section-copy max-w-md">Les adresses et espaces qui donnent au quartier son rythme et son caractère.</p>
+        </div>
+        <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {% for lieu in lieux %}
+            <article class="place-card reveal">
+                {% if lieu.image %}
+                    <img class="place-image" src="{{ lieu.image.url }}" alt="{{ lieu.nom }}" loading="lazy">
+                {% else %}
+                    <div class="place-image place-image-placeholder" aria-hidden="true">D·D</div>
+                {% endif %}
+                <div class="place-body">
+                    <span class="category-pill">{{ lieu.get_categorie_display }}</span>
+                    <h3>{{ lieu.nom }}</h3>
+                    <p>{{ lieu.description }}</p>
+                </div>
+            </article>
+            {% empty %}
+            <p class="empty-note sm:col-span-2 lg:col-span-3">Les lieux du quartier seront bientôt présentés ici. Vous pouvez les ajouter depuis l'administration.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section-pad events-section" id="evenements" aria-labelledby="events-title">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="section-heading reveal">
+            <div><p class="eyebrow"><span></span> Le quartier en mouvement</p><h2 class="section-title" id="events-title">On se retrouve <em>bientôt.</em></h2></div>
+            <p class="section-copy max-w-md">Rencontres, fêtes et initiatives : les prochains rendez-vous de la vie locale.</p>
+        </div>
+        <div class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {% for evenement in evenements %}
+            <article class="event-card reveal">
+                {% if evenement.image %}
+                    <img class="event-image" src="{{ evenement.image.url }}" alt="" loading="lazy">
+                {% else %}
+                    <div class="event-image event-image-placeholder" aria-hidden="true">Ensemble</div>
+                {% endif %}
+                <div class="event-content">
+                    <time class="event-date" datetime="{{ evenement.date|date:'c' }}"><span>{{ evenement.date|date:"d" }}</span>{{ evenement.date|date:"M Y" }}</time>
+                    <div><h3>{{ evenement.titre }}</h3><p class="event-time">{{ evenement.date|date:"l · H\hi" }}</p></div>
+                    <p class="event-description">{{ evenement.description }}</p>
+                </div>
+            </article>
+            {% empty %}
+            <p class="empty-note md:col-span-2 lg:col-span-3">Aucun événement n'est annoncé pour le moment. Revenez bientôt découvrir les prochains rendez-vous.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section-pad gallery-section" id="galerie" aria-labelledby="gallery-title">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="section-heading reveal">
+            <div><p class="eyebrow"><span></span> Des instants à garder</p><h2 class="section-title" id="gallery-title">Dieupeul en <em>images.</em></h2></div>
+            <p class="section-copy max-w-md">Les visages, les rues et les moments qui font battre le cœur du quartier.</p>
+        </div>
+        <div class="gallery-filters reveal" role="group" aria-label="Filtrer les photos">
+            <button type="button" class="filter-button is-active" data-filter="all" aria-pressed="true">Tout voir</button>
+            <button type="button" class="filter-button" data-filter="rues" aria-pressed="false">Rues</button>
+            <button type="button" class="filter-button" data-filter="personnes" aria-pressed="false">Personnes</button>
+            <button type="button" class="filter-button" data-filter="evenements" aria-pressed="false">Événements</button>
+            <button type="button" class="filter-button" data-filter="architecture" aria-pressed="false">Architecture</button>
+        </div>
+        <div class="gallery-grid">
+            {% for photo in photos %}
+            <figure class="gallery-item reveal" data-category="{{ photo.categorie }}">
+                <img src="{{ photo.image.url }}" alt="{{ photo.legende }}" loading="lazy">
+                <figcaption><span>{{ photo.get_categorie_display }}</span>{{ photo.legende }}</figcaption>
+            </figure>
+            {% empty %}
+            <p class="empty-note gallery-empty">La galerie se remplira bientôt de vos photos préférées du quartier.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="quotes-section section-pad" aria-labelledby="quotes-title">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="section-heading reveal">
+            <div><p class="eyebrow eyebrow-light"><span></span> Paroles du quartier</p><h2 class="section-title text-white" id="quotes-title">Ce qui nous lie, <em>se raconte.</em></h2></div>
+            <div class="carousel-controls">
+                <button type="button" class="carousel-button" data-carousel-prev aria-label="Témoignage précédent">←</button>
+                <button type="button" class="carousel-button" data-carousel-next aria-label="Témoignage suivant">→</button>
+            </div>
+        </div>
+        <div class="quotes-track" data-carousel>
+            {% for temoignage in temoignages %}
+            <figure class="quote-card{% if forloop.first %} is-current{% endif %}">
+                <span class="quote-mark" aria-hidden="true">“</span>
+                <blockquote>{{ temoignage.citation }}</blockquote>
+                <figcaption><span class="quote-avatar" aria-hidden="true">{{ temoignage.nom|first|upper }}</span><span><strong>{{ temoignage.nom }}</strong><small>{{ temoignage.get_role_display }}</small></span></figcaption>
+            </figure>
+            {% empty %}
+            <p class="quote-empty">Les témoignages des habitants et de la diaspora seront bientôt à l'honneur ici.</p>
+            {% endfor %}
+        </div>
+        {% if temoignages|length > 1 %}
+        <p class="carousel-status" aria-live="polite"><span data-carousel-current>1</span> / {{ temoignages|length }}</p>
+        {% endif %}
+    </div>
+</section>
+
+<section class="stats-section section-pad" aria-labelledby="stats-title">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="section-heading reveal">
+            <div><p class="eyebrow"><span></span> Quelques repères</p><h2 class="section-title" id="stats-title">Un quartier plein de <em>vie.</em></h2></div>
+            <p class="section-copy max-w-md">Des chiffres pour raconter une énergie qui se mesure surtout dans les liens.</p>
+        </div>
+        <div class="stats-grid reveal">
+            {% for chiffre in chiffres %}
+            <div class="stat-card">
+                <span class="stat-icon" aria-hidden="true">{{ chiffre.icone }}</span>
+                <strong class="stat-number" data-count="{{ chiffre.valeur }}">0</strong>
+                <span class="stat-label">{{ chiffre.libelle }}</span>
+            </div>
+            {% empty %}
+            <p class="empty-note">Ajoutez des chiffres clés dans l'administration pour les faire apparaître ici.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="contact-section section-pad" id="contact" aria-labelledby="contact-title">
+    <div class="mx-auto grid max-w-7xl gap-12 px-5 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20 lg:px-8">
+        <div class="contact-intro reveal">
+            <p class="eyebrow eyebrow-light"><span></span> La parole est à vous</p>
+            <h2 class="section-title text-white" id="contact-title">Une histoire à partager ? <em>Écrivons la suite.</em></h2>
+            <p class="mt-5 max-w-md text-base leading-8 text-white/70">Proposez une idée, partagez un souvenir ou faites-nous découvrir une adresse du quartier. Chaque contribution compte.</p>
+            <div class="contact-detail"><span aria-hidden="true">⌖</span><span>Dieupeul Derklé<br>Dakar, Sénégal</span></div>
+        </div>
+        <div class="contact-form-wrap reveal">
+            {% if contact_envoye %}
+            <div class="form-success" role="status">Merci pour votre message ! Il a bien été enregistré. <span aria-hidden="true">♥</span></div>
+            {% endif %}
+            <form method="post" action="{% url 'home' %}#contact" class="contact-form" novalidate>
+                {% csrf_token %}
+                {% if form.non_field_errors %}<div class="form-error" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+                <div class="form-field">
+                    <label for="{{ form.nom.id_for_label }}">Votre nom</label>
+                    {{ form.nom }}
+                    {% for error in form.nom.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+                </div>
+                <div class="form-field">
+                    <label for="{{ form.email.id_for_label }}">Votre e-mail</label>
+                    {{ form.email }}
+                    {% for error in form.email.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+                </div>
+                <div class="form-field">
+                    <label for="{{ form.message.id_for_label }}">Votre message</label>
+                    {{ form.message }}
+                    {% for error in form.message.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+                </div>
+                <button class="button button-sun form-submit" type="submit">Envoyer mon message <span aria-hidden="true">↗</span></button>
+                <p class="form-note">Vos coordonnées ne seront utilisées que pour répondre à votre message.</p>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

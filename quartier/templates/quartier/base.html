@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Découvrez Dieupeul Derklé, un quartier vivant de Dakar, son histoire, ses lieux, ses événements et celles et ceux qui le font vibrer.">
+    <meta name="theme-color" content="#173d2b">
+    <title>{% block title %}Dieupeul Derklé — Le cœur de Dakar{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        forest: "#173d2b",
+                        leaf: "#2f6847",
+                        sand: "#f7f3e9",
+                        clay: "#b65e3c",
+                        sun: "#e9b949"
+                    },
+                    fontFamily: {
+                        sans: ["DM Sans", "sans-serif"],
+                        display: ["Playfair Display", "serif"]
+                    }
+                }
+            }
+        };
+    </script>
+    <link rel="stylesheet" href="{% static 'quartier/css/style.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-sand font-sans text-slate-800 antialiased">
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
+    <header class="site-header fixed inset-x-0 top-0 z-50">
+        <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8" aria-label="Navigation principale">
+            <a href="#accueil" class="brand flex items-center gap-3" aria-label="Dieupeul Derklé, accueil">
+                <span class="brand-mark" aria-hidden="true">D<span>D</span></span>
+                <span class="brand-name">Dieupeul <span>Derklé</span></span>
+            </a>
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="navigation-principale" aria-label="Ouvrir le menu">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="nav-links" id="navigation-principale">
+                <a href="#histoire">Notre histoire</a>
+                <a href="#lieux">À découvrir</a>
+                <a href="#evenements">Vie du quartier</a>
+                <a href="#galerie">Galerie</a>
+                <a href="#contact" class="nav-contact">Nous contacter <span aria-hidden="true">↗</span></a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="contenu">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="mx-auto grid max-w-7xl gap-10 px-5 py-12 md:grid-cols-3 lg:px-8">
+            <div>
+                <a href="#accueil" class="brand brand-footer">
+                    <span class="brand-mark" aria-hidden="true">D<span>D</span></span>
+                    <span class="brand-name">Dieupeul <span>Derklé</span></span>
+                </a>
+                <p class="mt-4 max-w-sm text-sm leading-7 text-white/65">Un quartier, mille histoires. Un espace pour célébrer les liens et la vie de Dieupeul Derklé.</p>
+            </div>
+            <div>
+                <h2 class="footer-title">Explorer</h2>
+                <div class="mt-4 grid grid-cols-2 gap-3 text-sm text-white/70">
+                    <a href="#histoire">Notre histoire</a>
+                    <a href="#lieux">Les lieux</a>
+                    <a href="#evenements">Les événements</a>
+                    <a href="#galerie">La galerie</a>
+                </div>
+            </div>
+            <div>
+                <h2 class="footer-title">Restons en lien</h2>
+                <p class="mt-4 text-sm leading-7 text-white/65">Une idée, une photo ou un souvenir à partager ? Écrivez-nous.</p>
+                <a class="footer-link mt-3 inline-flex" href="#contact">Nous contacter <span aria-hidden="true">↗</span></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-5 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+                <p>© {% now "Y" %} Dieupeul Derklé · Dakar, Sénégal</p>
+                <p>Fait avec <span class="text-red-300" aria-label="amour">♥</span> à Dakar</p>
+            </div>
+        </div>
+    </footer>
+    <script src="{% static 'quartier/js/main.js' %}" defer></script>
+</body>
+</html>
