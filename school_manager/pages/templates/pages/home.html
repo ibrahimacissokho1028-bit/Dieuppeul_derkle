@@ -3,21 +3,110 @@
 {% block title %}Accueil | School Manager{% endblock %}
 
 {% block content %}
-<section class="hero">
-    <p class="eyebrow">Bienvenue</p>
-    <h1>{{ school_name }}</h1>
-    <p>Une plateforme simple pour consulter les étudiants et les enseignants.</p>
-    <a class="button" href="{% url 'students:list' %}">Voir les étudiants</a>
+<section class="dashboard-heading">
+    <div>
+        <p class="eyebrow">TABLEAU DE BORD</p>
+        <h1>Bienvenue sur votre tableau de bord</h1>
+        <p>Voici un aperçu de la vie de votre établissement.</p>
+    </div>
+    <a class="button" href="{% url 'students:create' %}">
+        <span aria-hidden="true">+</span> Inscrire un étudiant
+    </a>
 </section>
 
-<section class="stats" aria-label="Statistiques de l'école">
+<section class="stat-grid" aria-label="Statistiques de l'établissement">
     <article class="stat-card">
-        <span class="stat-number">{{ nb_students }}</span>
-        <span class="stat-label">étudiants inscrits</span>
+        <span class="stat-icon stat-icon-blue" aria-hidden="true">É</span>
+        <span class="stat-label">Étudiants inscrits</span>
+        <strong class="stat-number">{{ nb_students }}</strong>
+        <a class="stat-link" href="{% url 'students:list' %}">Voir les étudiants <span aria-hidden="true">→</span></a>
     </article>
     <article class="stat-card">
-        <span class="stat-number">{{ nb_active }}</span>
-        <span class="stat-label">étudiants actifs</span>
+        <span class="stat-icon stat-icon-violet" aria-hidden="true">P</span>
+        <span class="stat-label">Enseignants</span>
+        <strong class="stat-number">{{ nb_teachers }}</strong>
+        <a class="stat-link" href="{% url 'teachers:list' %}">Voir l’équipe <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="stat-card">
+        <span class="stat-icon stat-icon-green" aria-hidden="true">✓</span>
+        <span class="stat-label">Étudiants actifs</span>
+        <strong class="stat-number">{{ nb_active }}</strong>
+        <span class="stat-footnote">Sur {{ nb_students }} inscrits</span>
+    </article>
+    <article class="stat-card">
+        <span class="stat-icon stat-icon-orange" aria-hidden="true">C</span>
+        <span class="stat-label">Classes représentées</span>
+        <strong class="stat-number">{{ nb_classes }}</strong>
+        <span class="stat-footnote">
+            {{ new_enrollments }} nouvelle{% if new_enrollments != 1 %}s{% endif %}
+            inscription{% if new_enrollments != 1 %}s{% endif %} ce mois
+        </span>
+    </article>
+</section>
+
+<section class="dashboard-grid">
+    <article class="panel dashboard-panel">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">RÉPARTITION</p>
+                <h2>Étudiants par classe</h2>
+            </div>
+            <span class="panel-badge">{{ nb_classes }} classe{{ nb_classes|pluralize }}</span>
+        </div>
+        {% if class_distribution %}
+            <div class="chart-list">
+                {% for item in class_distribution %}
+                    <div class="chart-row">
+                        <div class="chart-label">
+                            <strong>{{ item.classe }}</strong>
+                            <span>{{ item.total }} étudiant{{ item.total|pluralize }}</span>
+                        </div>
+                        <div class="chart-track" role="img"
+                             aria-label="{{ item.total }} étudiant{{ item.total|pluralize }} en {{ item.classe }}">
+                            <span class="chart-bar" style="--bar-width: {{ item.percentage }}%"></span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state compact-empty">
+                <h3>Aucune classe pour le moment</h3>
+                <p>Les classes apparaîtront ici dès l’inscription d’un étudiant.</p>
+            </div>
+        {% endif %}
+    </article>
+
+    <article class="panel dashboard-panel">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">ACTIVITÉ RÉCENTE</p>
+                <h2>Dernières inscriptions</h2>
+            </div>
+            <a class="text-link" href="{% url 'students:list' %}">Tout voir</a>
+        </div>
+        {% if recent_students %}
+            <ul class="recent-list">
+                {% for student in recent_students %}
+                    <li>
+                        <span class="avatar">{{ student.first_name|first }}{{ student.last_name|first }}</span>
+                        <span class="recent-name">
+                            <a href="{% url 'students:detail' student.id %}">
+                                {{ student.first_name }} {{ student.last_name }}
+                            </a>
+                            <small>Classe {{ student.classe }}</small>
+                        </span>
+                        <time datetime="{{ student.created_at|date:'c' }}">
+                            {{ student.created_at|date:"d/m/Y" }}
+                        </time>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="empty-state compact-empty">
+                <h3>Aucune inscription récente</h3>
+                <p>Les nouveaux étudiants apparaîtront dans cette liste.</p>
+            </div>
+        {% endif %}
     </article>
 </section>
 {% endblock %}

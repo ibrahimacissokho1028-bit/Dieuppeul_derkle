@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -7,16 +8,33 @@ from .models import Student
 
 
 def student_list(request):
-    query = request.GET.get("q", "")
+    return _render_student_list(request)
+
+
+def _render_student_list(request, classe=""):
+    query = request.GET.get("q", "").strip()
+    selected_class = request.GET.get("classe", classe).strip()
     students = Student.objects.all()
     if query:
         students = students.filter(
             Q(first_name__icontains=query) | Q(last_name__icontains=query)
         )
+    if selected_class:
+        students = students.filter(classe=selected_class)
+
+    page_obj = Paginator(students, 10).get_page(request.GET.get("page"))
     return render(
         request,
         "students/student_list.html",
-        {"students": students, "query": query},
+        {
+            "students": page_obj.object_list,
+            "page_obj": page_obj,
+            "query": query,
+            "classe": selected_class,
+            "classes": Student.objects.values_list(
+                "classe", flat=True
+            ).distinct().order_by("classe"),
+        },
     )
 
 
@@ -26,12 +44,7 @@ def student_detail(request, id):
 
 
 def students_by_class(request, classe):
-    students = Student.objects.filter(classe=classe)
-    return render(
-        request,
-        "students/student_list.html",
-        {"students": students, "classe": classe, "query": ""},
-    )
+    return _render_student_list(request, classe=classe)
 
 
 def student_create(request):

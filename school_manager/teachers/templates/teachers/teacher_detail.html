@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}{{ teacher }} | School Manager{% endblock %}
+
+{% block content %}
+<section class="panel detail-card">
+    <p class="eyebrow">FICHE ENSEIGNANT</p>
+    <div class="teacher-profile-heading">
+        <span class="avatar avatar-large">{{ teacher.first_name|first }}{{ teacher.last_name|first }}</span>
+        <div>
+            <h1>{{ teacher.first_name }} {{ teacher.last_name }}</h1>
+            <p class="teacher-subject">{{ teacher.subject }}</p>
+        </div>
+    </div>
+    <dl class="details">
+        <dt>Adresse email</dt>
+        <dd><a href="mailto:{{ teacher.email }}">{{ teacher.email }}</a></dd>
+        <dt>Matière enseignée</dt>
+        <dd>{{ teacher.subject }}</dd>
+    </dl>
+    <div class="form-actions">
+        <a class="button" href="{% url 'teachers:update' teacher.id %}">Modifier la fiche</a>
+        <a class="button button-danger" href="{% url 'teachers:delete' teacher.id %}">Supprimer</a>
+        <a class="button button-secondary" href="{% url 'teachers:list' %}">Retour à la liste</a>
+    </div>
+</section>
+{% endblock %}

@@ -8,28 +8,120 @@
     <link rel="stylesheet" href="{% static 'students/style.css' %}">
 </head>
 <body>
-    <header class="site-header">
-        <div class="container header-content">
-            <a class="brand" href="{% url 'pages:home' %}">School Manager</a>
-            <nav aria-label="Navigation principale">
-                <a href="{% url 'pages:home' %}">Accueil</a>
-                <a href="{% url 'students:list' %}">Étudiants</a>
-                <a href="{% url 'teachers:list' %}">Enseignants</a>
-                <a href="{% url 'pages:about' %}">À propos</a>
-                <a href="{% url 'admin:index' %}">Administration</a>
+    <div class="app-layout">
+        <aside class="sidebar" id="main-navigation">
+            <a class="brand" href="{% url 'pages:home' %}">
+                <span class="brand-mark" aria-hidden="true">S</span>
+                <span>
+                    <strong>SCHOOL MANAGER</strong>
+                    <small>GESTION SCOLAIRE</small>
+                </span>
+            </a>
+            <p class="nav-caption">ESPACE DE TRAVAIL</p>
+            <nav class="side-nav" aria-label="Navigation principale">
+                <a href="{% url 'pages:home' %}"
+                   {% if request.resolver_match.namespace == "pages" and request.resolver_match.url_name == "home" %}aria-current="page"{% endif %}>
+                    <span class="nav-icon" aria-hidden="true">⌂</span>Vue d’ensemble
+                </a>
+                <a href="{% url 'students:list' %}"
+                   {% if request.resolver_match.namespace == "students" %}aria-current="page"{% endif %}>
+                    <span class="nav-icon" aria-hidden="true">É</span>Étudiants
+                </a>
+                <a href="{% url 'teachers:list' %}"
+                   {% if request.resolver_match.namespace == "teachers" %}aria-current="page"{% endif %}>
+                    <span class="nav-icon" aria-hidden="true">P</span>Enseignants
+                </a>
+                <a href="{% url 'pages:about' %}"
+                   {% if request.resolver_match.url_name == "about" %}aria-current="page"{% endif %}>
+                    <span class="nav-icon" aria-hidden="true">i</span>À propos
+                </a>
             </nav>
+            <div class="sidebar-bottom">
+                <p class="nav-caption">ADMINISTRATION</p>
+                <a class="admin-link" href="{% url 'admin:index' %}">
+                    <span class="nav-icon" aria-hidden="true">⚙</span>Administration Django
+                </a>
+                <p class="sidebar-note">Une gestion plus simple, au quotidien.</p>
+            </div>
+        </aside>
+
+        <div class="app-main">
+            <header class="topbar">
+                <button class="nav-toggle" type="button" aria-controls="main-navigation"
+                        aria-expanded="false" aria-label="Afficher ou masquer le menu">
+                    <span aria-hidden="true">☰</span>
+                </button>
+                <div class="topbar-school">
+                    <span class="topbar-kicker">ÉTABLISSEMENT</span>
+                    <strong>Lycée d'Excellence de Dakar</strong>
+                </div>
+                <div class="topbar-actions">
+                    <button class="theme-toggle" type="button" data-theme-toggle
+                            aria-pressed="false">
+                        <span aria-hidden="true">◐</span>
+                        <span data-theme-label>Mode sombre</span>
+                    </button>
+                    <a class="profile-link" href="{% url 'admin:index' %}">
+                        <span class="profile-avatar" aria-hidden="true">SM</span>
+                        <span>Mon espace</span>
+                    </a>
+                </div>
+            </header>
+
+            <main class="main-content">
+                <div class="content-container">
+                    {% if messages %}
+                        <div class="messages" aria-live="polite">
+                            {% for message in messages %}
+                                <p class="message {{ message.tags }}">{{ message }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% block content %}{% endblock %}
+                </div>
+                <footer class="site-footer">
+                    <span>School Manager</span>
+                    <span>Gestion scolaire · Dakar, Sénégal</span>
+                </footer>
+            </main>
         </div>
-    </header>
-    <main class="container page-content">
-        {% if messages %}
-            {% for message in messages %}
-                <p class="message {{ message.tags }}">{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-        {% block content %}{% endblock %}
-    </main>
-    <footer class="site-footer">
-        <div class="container">School Manager · Gestion scolaire avec Django</div>
-    </footer>
+    </div>
+    <script>
+        document.documentElement.classList.add("has-js");
+
+        const themeToggle = document.querySelector("[data-theme-toggle]");
+        const themeLabel = document.querySelector("[data-theme-label]");
+        const savedTheme = localStorage.getItem("school-manager-theme");
+        if (savedTheme === "dark") {
+            document.documentElement.dataset.theme = "dark";
+        }
+
+        function updateThemeControl() {
+            const isDark = document.documentElement.dataset.theme === "dark";
+            themeToggle.setAttribute("aria-pressed", String(isDark));
+            themeLabel.textContent = isDark ? "Mode clair" : "Mode sombre";
+        }
+
+        updateThemeControl();
+        themeToggle.addEventListener("click", function () {
+            const isDark = document.documentElement.dataset.theme === "dark";
+            if (isDark) {
+                delete document.documentElement.dataset.theme;
+                localStorage.setItem("school-manager-theme", "light");
+            } else {
+                document.documentElement.dataset.theme = "dark";
+                localStorage.setItem("school-manager-theme", "dark");
+            }
+            updateThemeControl();
+        });
+
+        const navToggle = document.querySelector(".nav-toggle");
+        const sidebar = document.querySelector(".sidebar");
+        navToggle.addEventListener("click", function () {
+            const isOpen = navToggle.getAttribute("aria-expanded") === "true";
+            navToggle.setAttribute("aria-expanded", String(!isOpen));
+            sidebar.classList.toggle("is-open", !isOpen);
+        });
+    </script>
 </body>
 </html>

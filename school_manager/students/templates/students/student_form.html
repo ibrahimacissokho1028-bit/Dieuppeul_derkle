@@ -15,12 +15,14 @@
                     {{ field.errors }}
                 </div>
             {% endfor %}
-            <button type="submit">Enregistrer</button>
-            {% if student %}
-                <a href="{% url 'students:detail' student.id %}">Annuler</a>
-            {% else %}
-                <a href="{% url 'students:list' %}">Annuler</a>
-            {% endif %}
+            <div class="form-actions">
+                <button class="button" type="submit">Enregistrer</button>
+                {% if student %}
+                    <a class="button button-secondary" href="{% url 'students:detail' student.id %}">Annuler</a>
+                {% else %}
+                    <a class="button button-secondary" href="{% url 'students:list' %}">Annuler</a>
+                {% endif %}
+            </div>
         </form>
     </section>
 {% endblock %}

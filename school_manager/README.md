@@ -96,7 +96,7 @@ et ne doit pas être inscrit dans le code) :
 python manage.py createsuperuser
 ```
 
-Lancer ensuite le site et ouvrir `http://127.0.0.1:8000/admin/` :
+Lancer ensuite le site et ouvrir `/admin/` :
 
 ```powershell
 python manage.py runserver

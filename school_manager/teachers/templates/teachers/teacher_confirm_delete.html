@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Supprimer {{ teacher }} | School Manager{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <p class="eyebrow">CONFIRMATION</p>
+    <h1>Supprimer {{ teacher }} ?</h1>
+    <p>Cette action supprimera la fiche de l’enseignant. Elle est définitive.</p>
+    <form method="post" class="form-actions">
+        {% csrf_token %}
+        <button type="submit" class="button button-danger">Oui, supprimer</button>
+        <a class="button button-secondary" href="{% url 'teachers:detail' teacher.id %}">Annuler</a>
+    </form>
+</section>
+{% endblock %}

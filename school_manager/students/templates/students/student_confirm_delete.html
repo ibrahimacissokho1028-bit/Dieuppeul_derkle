@@ -8,8 +8,8 @@
         <p>Cette action est définitive : la fiche sera effacée de la base.</p>
         <form method="post">
             {% csrf_token %}
-            <button type="submit" class="btn-danger">Oui, supprimer</button>
-            <a href="{% url 'students:detail' student.id %}">Annuler</a>
+            <button type="submit" class="button button-danger">Oui, supprimer</button>
+            <a class="button button-secondary" href="{% url 'students:detail' student.id %}">Annuler</a>
         </form>
     </section>
 {% endblock %}

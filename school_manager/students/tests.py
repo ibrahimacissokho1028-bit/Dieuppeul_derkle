@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
 
+from teachers.models import Teacher
+
 from .forms import StudentForm
 from .models import Student
 
@@ -68,11 +70,48 @@ class StudentPagesTests(TestCase):
         self.assertNotContains(response, "Moussa")
 
     def test_homepage_counts_students_and_active_students(self):
+        Teacher.objects.create(
+            first_name="Mamadou",
+            last_name="Ba",
+            email="mamadou.dashboard@ecole.sn",
+            subject="Mathématiques",
+        )
         response = self.client.get(reverse("pages:home"))
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["nb_students"], 3)
         self.assertEqual(response.context["nb_active"], 2)
+        self.assertEqual(response.context["nb_teachers"], 1)
+        self.assertEqual(response.context["nb_classes"], 2)
+        self.assertEqual(response.context["new_enrollments"], 3)
+        self.assertEqual(
+            response.context["class_distribution"],
+            [
+                {"classe": "L1", "total": 2, "percentage": 100},
+                {"classe": "L2", "total": 1, "percentage": 50},
+            ],
+        )
+        self.assertEqual(len(response.context["recent_students"]), 3)
+
+    def test_student_list_filters_classes_and_paginates(self):
+        for index in range(10):
+            Student.objects.create(
+                first_name=f"Élève{index}",
+                last_name="Test",
+                email=f"eleve{index}@ecole.sn",
+                classe="L2",
+            )
+
+        response = self.client.get(
+            reverse("students:list"),
+            {"classe": "L2", "page": 2},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["page_obj"].paginator.count, 11)
+        self.assertEqual(len(response.context["students"]), 1)
+        self.assertEqual(response.context["classe"], "L2")
+        self.assertContains(response, 'value="L2" selected')
 
     def test_orm_read_create_save_and_delete_operations(self):
         self.assertEqual(Student.objects.all().count(), 3)

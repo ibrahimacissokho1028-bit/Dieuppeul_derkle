@@ -7,6 +7,7 @@
         <h1>{{ title }}</h1>
         <form method="post">
             {% csrf_token %}
+            {{ form.non_field_errors }}
             {% for field in form %}
                 <div class="field">
                     {{ field.label_tag }}
@@ -14,8 +15,14 @@
                     {{ field.errors }}
                 </div>
             {% endfor %}
-            <button type="submit">Enregistrer</button>
-            <a href="{% url 'teachers:list' %}">Annuler</a>
+            <div class="form-actions">
+                <button class="button" type="submit">Enregistrer</button>
+                {% if teacher %}
+                    <a class="button button-secondary" href="{% url 'teachers:detail' teacher.id %}">Annuler</a>
+                {% else %}
+                    <a class="button button-secondary" href="{% url 'teachers:list' %}">Annuler</a>
+                {% endif %}
+            </div>
         </form>
     </section>
 {% endblock %}
