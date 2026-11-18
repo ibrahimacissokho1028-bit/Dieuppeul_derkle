@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil | School Manager{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <p class="eyebrow">Bienvenue</p>
+    <h1>{{ school_name }}</h1>
+    <p>Une plateforme simple pour consulter les étudiants et les enseignants.</p>
+    <a class="button" href="{% url 'students:list' %}">Voir les étudiants</a>
+</section>
+
+<section class="stats" aria-label="Statistiques de l'école">
+    <article class="stat-card">
+        <span class="stat-number">{{ nb_students }}</span>
+        <span class="stat-label">étudiants inscrits</span>
+    </article>
+    <article class="stat-card">
+        <span class="stat-number">{{ nb_active }}</span>
+        <span class="stat-label">étudiants actifs</span>
+    </article>
+</section>
+{% endblock %}

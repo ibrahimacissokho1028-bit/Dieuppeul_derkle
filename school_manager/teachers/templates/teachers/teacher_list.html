@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Enseignants | School Manager{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+    <p class="eyebrow">Équipe pédagogique</p>
+    <h1>Enseignants</h1>
+    <p>Les enseignants enregistrés dans la base de données de l'école.</p>
+</section>
+
+<p><a class="button" href="{% url 'teachers:create' %}">+ Ajouter un enseignant</a></p>
+
+{% if teachers %}
+    <div class="teacher-grid">
+        {% for teacher in teachers %}
+            <article class="panel teacher-card">
+                <span class="avatar">{{ teacher.first_name|first }}{{ teacher.last_name|first }}</span>
+                <div>
+                    <h2>{{ teacher.first_name }} {{ teacher.last_name }}</h2>
+                    <p class="teacher-subject">{{ teacher.subject }}</p>
+                    <a href="mailto:{{ teacher.email }}">{{ teacher.email }}</a>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <h2>Aucun enseignant enregistré</h2>
+        <p>Ajoutez des enseignants depuis l'administration.</p>
+    </div>
+{% endif %}
+{% endblock %}

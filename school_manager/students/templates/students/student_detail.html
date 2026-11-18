@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}{{ student.first_name }} {{ student.last_name }} | School Manager{% endblock %}
+
+{% block content %}
+<section class="panel detail-card">
+    <p class="eyebrow">Fiche étudiant</p>
+    <h1>{{ student.first_name }} {{ student.last_name }}</h1>
+    <dl class="details">
+        <dt>Classe</dt>
+        <dd>{{ student.classe }}</dd>
+        <dt>Email</dt>
+        <dd><a href="mailto:{{ student.email }}">{{ student.email }}</a></dd>
+        <dt>Téléphone</dt>
+        <dd>{{ student.phone|default:"Non renseigné" }}</dd>
+        <dt>Date de naissance</dt>
+        <dd>{{ student.birth_date|date:"d/m/Y"|default:"Non renseignée" }}</dd>
+        <dt>Statut</dt>
+        <dd>{% if student.active %}Actif{% else %}Inactif{% endif %}</dd>
+        <dt>Inscrit le</dt>
+        <dd>{{ student.created_at|date:"d/m/Y à H:i" }}</dd>
+    </dl>
+    <a class="button button-secondary" href="{% url 'students:list' %}">
+        Retour à la liste
+    </a>
+    <p>
+        <a href="{% url 'students:update' student.id %}">Modifier</a>
+        ·
+        <a href="{% url 'students:delete' student.id %}">Supprimer</a>
+    </p>
+</section>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}À propos | School Manager{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <p class="eyebrow">Le projet</p>
+    <h1>À propos de School Manager</h1>
+    <p>
+        Cette application pédagogique utilise Django, SQLite et son ORM pour
+        gérer les étudiants et les enseignants de l'école.
+    </p>
+    <p>
+        Les données sont enregistrées dans la base plutôt que dans les vues.
+        Le personnel autorisé peut les administrer depuis l'interface Django.
+    </p>
+</section>
+{% endblock %}
